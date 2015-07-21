@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CarCommunicatorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CarData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CarInformationId" Type="int" Nullable="false" />
+          <Property Name="ReceiveDate" Type="datetime" Nullable="false" />
+          <Property Name="Lat" Type="float" />
+          <Property Name="Lng" Type="float" />
+          <Property Name="BatteryPercent" Type="float" />
+        </EntityType>
+        <EntityType Name="CarInformation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Owner" Type="nvarchar" MaxLength="500" />
+          <Property Name="Brand" Type="nvarchar" MaxLength="100" />
+          <Property Name="Model" Type="nvarchar" MaxLength="100" />
+          <Property Name="Information" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="LoggerBase">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Guid" Type="nvarchar" MaxLength="1000" />
+          <Property Name="User" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="LoggerInformation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoggerBaseId" Type="int" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="MessageType" Type="int" Nullable="false" />
+          <Property Name="ActionDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__CarData__CarInfo__1273C1CD">
+          <End Role="CarInformation" Type="Self.CarInformation" Multiplicity="1" />
+          <End Role="CarData" Type="Self.CarData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarInformation">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarData">
+              <PropertyRef Name="CarInformationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__LoggerInf__Logge__182C9B23">
+          <End Role="LoggerBase" Type="Self.LoggerBase" Multiplicity="0..1" />
+          <End Role="LoggerInformation" Type="Self.LoggerInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoggerBase">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LoggerInformation">
+              <PropertyRef Name="LoggerBaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarCommunicatorModelStoreContainer">
+          <EntitySet Name="CarData" EntityType="Self.CarData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarInformation" EntityType="Self.CarInformation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoggerBase" EntityType="Self.LoggerBase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoggerInformation" EntityType="Self.LoggerInformation" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__CarData__CarInfo__1273C1CD" Association="Self.FK__CarData__CarInfo__1273C1CD">
+            <End Role="CarInformation" EntitySet="CarInformation" />
+            <End Role="CarData" EntitySet="CarData" />
+          </AssociationSet>
+          <AssociationSet Name="FK__LoggerInf__Logge__182C9B23" Association="Self.FK__LoggerInf__Logge__182C9B23">
+            <End Role="LoggerBase" EntitySet="LoggerBase" />
+            <End Role="LoggerInformation" EntitySet="LoggerInformation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CarCommunicatorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CarData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CarInformationId" Type="Int32" Nullable="false" />
+          <Property Name="ReceiveDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Lat" Type="Double" />
+          <Property Name="Lng" Type="Double" />
+          <NavigationProperty Name="CarInformation" Relationship="Self.FK__CarData__CarInfo__1273C1CD" FromRole="CarData" ToRole="CarInformation" />
+          <Property Name="BatteryPercent" Type="Double" />
+        </EntityType>
+        <EntityType Name="CarInformation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Owner" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Brand" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Information" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CarData" Relationship="Self.FK__CarData__CarInfo__1273C1CD" FromRole="CarInformation" ToRole="CarData" />
+        </EntityType>
+        <Association Name="FK__CarData__CarInfo__1273C1CD">
+          <End Role="CarInformation" Type="Self.CarInformation" Multiplicity="1" />
+          <End Role="CarData" Type="Self.CarData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarInformation">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CarData">
+              <PropertyRef Name="CarInformationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarCommunicatorEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CarData" EntityType="Self.CarData" />
+          <EntitySet Name="CarInformation" EntityType="Self.CarInformation" />
+          <AssociationSet Name="FK__CarData__CarInfo__1273C1CD" Association="Self.FK__CarData__CarInfo__1273C1CD">
+            <End Role="CarInformation" EntitySet="CarInformation" />
+            <End Role="CarData" EntitySet="CarData" />
+          </AssociationSet>
+          <EntitySet Name="LoggerBase" EntityType="CarCommunicatorModel.LoggerBase" />
+          <EntitySet Name="LoggerInformation" EntityType="CarCommunicatorModel.LoggerInformation" />
+          <AssociationSet Name="FK__LoggerInf__Logge__182C9B23" Association="CarCommunicatorModel.FK__LoggerInf__Logge__182C9B23">
+            <End Role="LoggerBase" EntitySet="LoggerBase" />
+            <End Role="LoggerInformation" EntitySet="LoggerInformation" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="LoggerBase">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Guid" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="User" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LoggerInformation" Relationship="CarCommunicatorModel.FK__LoggerInf__Logge__182C9B23" FromRole="LoggerBase" ToRole="LoggerInformation" />
+        </EntityType>
+        <EntityType Name="LoggerInformation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoggerBaseId" Type="Int32" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MessageType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="LoggerBase" Relationship="CarCommunicatorModel.FK__LoggerInf__Logge__182C9B23" FromRole="LoggerInformation" ToRole="LoggerBase" />
+          <Property Name="ActionDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK__LoggerInf__Logge__182C9B23">
+          <End Type="CarCommunicatorModel.LoggerBase" Role="LoggerBase" Multiplicity="0..1" />
+          <End Type="CarCommunicatorModel.LoggerInformation" Role="LoggerInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoggerBase">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LoggerInformation">
+              <PropertyRef Name="LoggerBaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CarCommunicatorModelStoreContainer" CdmEntityContainer="CarCommunicatorEntities">
+          <EntitySetMapping Name="CarData">
+            <EntityTypeMapping TypeName="CarCommunicatorModel.CarData">
+              <MappingFragment StoreEntitySet="CarData">
+                <ScalarProperty Name="BatteryPercent" ColumnName="BatteryPercent" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CarInformationId" ColumnName="CarInformationId" />
+                <ScalarProperty Name="ReceiveDate" ColumnName="ReceiveDate" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarInformation">
+            <EntityTypeMapping TypeName="CarCommunicatorModel.CarInformation">
+              <MappingFragment StoreEntitySet="CarInformation">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Information" ColumnName="Information" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoggerBase">
+            <EntityTypeMapping TypeName="CarCommunicatorModel.LoggerBase">
+              <MappingFragment StoreEntitySet="LoggerBase">
+                <ScalarProperty Name="User" ColumnName="User" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoggerInformation">
+            <EntityTypeMapping TypeName="CarCommunicatorModel.LoggerInformation">
+              <MappingFragment StoreEntitySet="LoggerInformation">
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="MessageType" ColumnName="MessageType" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="LoggerBaseId" ColumnName="LoggerBaseId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
